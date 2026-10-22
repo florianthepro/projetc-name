@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>New Projekt</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+  <main>
+    <h1>New Projekt</h1>
+    <p id="status">Backend wird geprüft …</p>
+    <form id="login-form">
+      <label>Benutzername <input id="username" autocomplete="username" required></label>
+      <label>Passwort <input id="password" type="password" autocomplete="current-password" required></label>
+      <button type="submit">Anmelden</button>
+    </form>
+    <button id="logout" type="button" hidden>Abmelden</button>
+    <p id="message" aria-live="polite"></p>
+  </main>
+  <script src="js/app.js"></script>
+  <script src="js/login.js"></script>
+</body>
+</html>

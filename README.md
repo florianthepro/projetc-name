@@ -1,44 +1,60 @@
-# New Projekt
+# {{PROJECT_NAME}}
 
-Minimale Vorlage für ein statisches Frontend mit einem Django-Backend auf Debian. Caddy liefert das Frontend aus und leitet API- und Account-Anfragen über einen projektspezifischen Unix-Socket an Gunicorn weiter.
+{{KURZE_PROJEKTBESCHREIBUNG}}
 
-## Vor der Verwendung anpassen
+## Aufruf
 
-Am Anfang von `setup.sh` mindestens prüfen:
-
-- `PROJECT_NAME`
-- `PROJECT_PATH`
-- `PROJECT_REPOSITORY`
-- `PROJECT_URL_PATH`
-- Django- und Gunicorn-Version
-- Django-Admin aktiv oder deaktiviert
-- Frontend-Fallback leer für 404 oder `index.html` für eine SPA
-
-In `backend.py` müssen projektspezifische Modelle, APIs, Rechte, Uploadregeln und zusätzliche Pakete ergänzt werden.
+```text
+{{PROJEKT_URL}}
+```
 
 ## Installation
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/florianthepro/new-projekt/main/setup.sh | sudo bash
+curl -fsSL https://raw.githubusercontent.com/{{GITHUB_BENUTZER}}/{{REPOSITORY}}/main/setup.sh | sudo bash
 ```
 
-Das Setup fragt nach HTTP oder HTTPS und der Domain. Bei automatisch verwaltetem HTTPS beschafft und erneuert Caddy das Zertifikat.
+Während der Installation werden Domain, HTTP/HTTPS und gegebenenfalls vorhandene Zertifikatsdateien abgefragt.
 
-## Betrieb
+## Projektwerte
 
-```bash
-sudo systemctl status new-projekt
-sudo systemctl restart new-projekt
-sudo journalctl -u new-projekt -f
+Die projektspezifischen Werte stehen am Anfang von `setup.sh`:
+
+```sh
+PROJECT_NAME="{{ANZEIGENAME}}"
+PROJECT_PATH="{{TECHNISCHER_NAME}}"
+PROJECT_REPOSITORY="https://github.com/{{GITHUB_BENUTZER}}/{{REPOSITORY}}.git"
+PROJECT_BRANCH="main"
+PROJECT_URL_PATH="/{{URL_PFAD}}"
 ```
 
-Django-Administrator anlegen, nachdem `DJANGO_ADMIN_ENABLED="true"` gesetzt und das Setup erneut ausgeführt wurde:
+`PROJECT_PATH` muss klein geschrieben, serverweit eindeutig und ohne Leerzeichen sein.
 
-```bash
-sudo -u new-projekt sh -c 'set -a; . /etc/new-projekt/environment; set +a; /srv/webapps/new-projekt/venv/bin/python /srv/webapps/new-projekt/app/backend.py create-admin'
+## Inhalt
+
+```text
+{{REPOSITORY}}/
+├── README.md
+├── front-and-back-end-structure.md
+├── setup.sh
+├── backend.py
+├── index.html
+├── css/
+├── js/
+└── assets/
 ```
 
-## Wichtige Endpunkte
+## Backend
+
+`backend.py` enthält die minimale Django-Anwendung und wird um die projektspezifische Logik ergänzt:
+
+- {{DATENMODELLE}}
+- {{API_ENDPUNKTE}}
+- {{ROLLEN_UND_RECHTE}}
+- {{UPLOADREGELN}}
+- {{WEITERE_PYTHON_PAKETE}}
+
+Grundlegende Endpunkte:
 
 ```text
 GET  /api/health
@@ -47,8 +63,21 @@ POST /account/login
 POST /account/logout
 ```
 
-Login und Logout verwenden Djangos Session- und CSRF-Schutz. Das Frontend muss vor POST-Anfragen zuerst `/account/session` aufrufen und den gesetzten CSRF-Cookie als `X-CSRFToken` mitsenden.
+## Betrieb
 
-## Hinweis zur Vorlage
+```bash
+sudo systemctl status {{PROJECT_PATH}}
+sudo systemctl restart {{PROJECT_PATH}}
+sudo journalctl -u {{PROJECT_PATH}} -f
+```
 
-Die Dateien bilden eine Mindeststruktur, keine fertige Fachanwendung. Vor einem öffentlichen Einsatz müssen insbesondere Domain, URL-Pfad, Berechtigungen, Rate Limiting, Uploadregeln, Backups, Monitoring und projektspezifische Tests festgelegt werden.
+## Noch festzulegen
+
+- produktive Domain: `{{DOMAIN}}`
+- URL-Pfad: `{{URL_PFAD}}`
+- Anmeldung über: `{{BENUTZERNAME_ODER_EMAIL}}`
+- Registrierung: `{{AKTIV_ODER_DEAKTIVIERT}}`
+- Django-Admin: `{{AKTIV_ODER_DEAKTIVIERT}}`
+- Frontend-Fallback: `{{LEER_FUER_404_ODER_INDEX_HTML}}`
+- Backupziel: `{{BACKUPZIEL}}`
+- Monitoring: `{{MONITORING}}`
